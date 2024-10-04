@@ -1,0 +1,33 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"directories": {
+		"lib": "lib"
+	},
+	"scripts": {
+		"start": "nodemon --exec ts-node index.ts",
+		"dev": "nodemon --exec ts-node index.ts",
+		"build": "tsc",
+		"check:types": "tsc",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"backend": "file:",
+		"cors": "^2.8.5",
+		"express": "^4.21.0",
+		"express-async-handler": "^1.2.0",
+		"mongoose": "^8.7.0"
+	},
+	"devDependencies": {
+		"@types/cors": "^2.8.17",
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.7.4",
+		"nodemon": "^3.1.7",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.6.2"
+	}
+}

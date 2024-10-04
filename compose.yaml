@@ -1,0 +1,28 @@
+services:
+  database:
+    image: mongo:8.0.0
+    volumes:
+      - database:/data/db
+    ports:
+      - 27017:27017
+  backend:
+    depends_on:
+      - database
+    build:
+      context: ./backend
+    ports:
+      - '9000:9000'
+    restart: always
+    develop:
+      watch:
+        - path: ./backend/package.json
+          action: rebuild
+        - path: ./backend
+          target: /app/backend
+          action: sync+restart
+    environment:
+      - MONGODB_URI=mongodb://database:27017/events-app
+      - HOST_URL=http://localhost:5173
+
+volumes:
+  database:
