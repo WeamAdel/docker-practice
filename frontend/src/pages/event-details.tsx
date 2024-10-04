@@ -21,15 +21,21 @@ export function EventDetailsPage() {
 		mutationFn: (id: string) => {
 			return fetch(API_ROUTES.deleteEvent.path(id), {
 				method: API_ROUTES.deleteEvent.method,
-			});
-		},
-		onSuccess: async () => {
-			message.success('Event deleted successfully');
-			await queryClient.invalidateQueries({ queryKey: ['events'] });
-			navigate('/');
-		},
-		onError: (error: Error) => {
-			message.error(error?.message || 'Error deleting event');
+			})
+				.then(async (res) => {
+					const data = await res.json();
+
+					if (res.ok) {
+						message.success('Event deleted successfully');
+						await queryClient.invalidateQueries({ queryKey: ['events'] });
+						navigate('/');
+					} else {
+						throw new Error(data?.message);
+					}
+				})
+				.catch((error) => {
+					message.error(error?.message || 'Error deleting event');
+				});
 		},
 	});
 

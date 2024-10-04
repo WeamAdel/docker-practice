@@ -27,15 +27,20 @@ export function EditEventPage() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-			}).then((res) => res.json());
-		},
-		onSuccess: async () => {
-			message.success('Event added successfully');
-			await queryClient.invalidateQueries({ queryKey: ['events'] });
-			navigate(`/event/${eventId}`);
-		},
-		onError: (error: Error) => {
-			message.error(error?.message || 'Error adding event');
+			})
+				.then(async (res) => {
+					if (res.ok) {
+						message.success('Event added successfully');
+						await queryClient.invalidateQueries({ queryKey: ['events'] });
+						navigate(`/event/${eventId}`);
+					} else {
+						const data = await res.json();
+						throw new Error(data?.message);
+					}
+				})
+				.catch((error) => {
+					throw new Error(error?.message || 'Error updating event');
+				});
 		},
 	});
 

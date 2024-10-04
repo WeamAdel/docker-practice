@@ -16,15 +16,16 @@ export function AddEventPage() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-			}).then((res) => res.json());
-		},
-		onSuccess: async () => {
-			message.success('Event added successfully');
-			await queryClient.invalidateQueries({ queryKey: ['events'] });
-			navigate('/');
-		},
-		onError: (error: Error) => {
-			message.error(error?.message || 'Error adding event');
+			}).then(async (res) => {
+				if (res.ok) {
+					message.success('Event added successfully');
+					await queryClient.invalidateQueries({ queryKey: ['events'] });
+					navigate('/');
+				} else {
+					const data = await res.json();
+					throw new Error(data?.message);
+				}
+			});
 		},
 	});
 
